@@ -53,10 +53,10 @@ export default function NavbarContainer() {
             <ProfileMenu />
           ) : (
             <div>
-              <Nav.Button onClick={history.push({ pathname: "/" })}>
+              <Nav.Button onClick={() => history.push({ pathname: "/signin" })}>
                 Login
               </Nav.Button>
-              <Nav.Button onClick={history.push({ pathname: "/" })}>
+              <Nav.Button onClick={() => history.push({ pathname: "/signup" })}>
                 Sign UP
               </Nav.Button>
             </div>

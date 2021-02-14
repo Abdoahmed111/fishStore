@@ -29,13 +29,14 @@ export default function SignIn() {
 
     axios
       .post("/register", loginData)
-      .then((res) =>
-        window.localStorage.setItem("user", JSON.stringify(res.data.data))
-      )
+      .then((res) => {
+        window.localStorage.setItem("user", JSON.stringify(res.data.data));
+        history.push({
+          pathname: "/",
+        });
+      })
       .catch((err) => console.log(err.message));
-    history.push({
-      pathname: "/",
-    });
+
     console.log(JSON.parse(window.localStorage.getItem("user")));
   };
   return (
