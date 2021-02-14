@@ -2,13 +2,16 @@ import { Divider } from "@material-ui/core";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Grid, Loader } from "../components";
+import { getCategories } from "../redux/categories/reducers/categoriesReducer";
 
-export default function ProductsContainer({ categories, products, location }) {
+export default function ProductsContainer({ products, location }) {
   const baseUrl = "http://eslamfishstore.com/public/uploads/";
   const [loader, setLoader] = useState(Boolean);
   const [category, setCategory] = useState([]);
+  const categories = useSelector(getCategories);
 
   const renderRatingStars = (rating) => {
     let ratings = [];
