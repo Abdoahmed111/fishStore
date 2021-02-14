@@ -21,7 +21,9 @@ export default function ProfileMenu() {
     const user_token = user.token;
     axios
       .get("/logout", {
-        headers: `Bearer ${user_token}`,
+        headers: {
+          Authorization: `Bearer ${user_token}`,
+        },
       })
       .then((res) => {
         console.log(res);
@@ -31,6 +33,7 @@ export default function ProfileMenu() {
         });
       })
       .catch((error) => console.log(error));
+    setMenu(null);
   };
   return (
     <>
