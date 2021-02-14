@@ -28,7 +28,7 @@ export default function SignIn() {
     loginData["device_token"] = device_token;
 
     axios
-      .post("/register", loginData)
+      .post("/login", loginData)
       .then((res) => {
         window.localStorage.setItem("user", JSON.stringify(res.data.data));
         history.push({
