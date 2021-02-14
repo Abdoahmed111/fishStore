@@ -33,8 +33,8 @@ const categoriesReducer = (state = initialState, action) => {
 };
 
 // Selectors
-export const getCategories = (state) => state.categories;
-export const getCategoriesPending = (state) => state.pending;
-export const getCategoriesError = (state) => state.error;
+export const getCategories = (state) => state.categories.categories;
+export const getCategoriesPending = (state) => state.categories.pending;
+export const getCategoriesError = (state) => state.categories.error;
 
 export default categoriesReducer;

@@ -4,7 +4,7 @@ import { Grid } from "../components";
 import { getCategories } from "../redux/categories/reducers/categoriesReducer";
 
 export default function CategoryContainer() {
-  const categories = useSelector(getCategories).categories;
+  const categories = useSelector(getCategories);
   const baseUrl = "http://eslamfishstore.com/public/uploads/";
   const history = useHistory();
 
