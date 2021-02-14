@@ -6,7 +6,7 @@ import { getCategories } from "../../../redux/categories/reducers/categoriesRedu
 import { Container } from "./styles/navbarMenu";
 
 export default function NavbarMenu() {
-  const categories = useSelector(getCategories).categories;
+  const categories = useSelector(getCategories);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [mobileMenu, setMobileMenu] = useState(null);

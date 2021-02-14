@@ -7,8 +7,22 @@ import Product from "./pages/product";
 import FooterContainer from "./containers/footerContainer";
 import store from "./store";
 import { Provider } from "react-redux";
+import { useEffect } from "react";
+import firebase from "./firebase";
 
 function App() {
+  useEffect(() => {
+    const messaging = firebase.messaging();
+    Notification.requestPermission()
+      .then(() => {
+        return messaging.getToken();
+      })
+      .then((token) =>
+        window.localStorage.setItem("device_token", JSON.stringify(token))
+      )
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <Provider store={store}>
       <Switch>

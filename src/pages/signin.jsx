@@ -1,9 +1,45 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
 import { Form } from "../components";
 
 export default function SignIn() {
+  const history = useHistory();
+  const [loginData, setLoginData] = useState({
+    phone_number: "",
+    password: "",
+    device_type: "web",
+  });
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setLoginData({
+      ...loginData,
+      [event.target.name]: value,
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const device_token = JSON.parse(
+      window.localStorage.getItem("device_token")
+    );
+
+    loginData["device_token"] = device_token;
+
+    axios
+      .post("/register", loginData)
+      .then((res) =>
+        window.localStorage.setItem("user", JSON.stringify(res.data.data))
+      )
+      .catch((err) => console.log(err.message));
+    history.push({
+      pathname: "/",
+    });
+    console.log(JSON.parse(window.localStorage.getItem("user")));
+  };
   return (
-    <Form elevation={6}>
+    <Form elevation={6} onSubmit={handleSubmit}>
       <Form.Title component="h1" variant="h5">
         Sign in
       </Form.Title>
@@ -13,13 +49,14 @@ export default function SignIn() {
           <Form.Row item xs={12}>
             <Form.Input
               type="number"
-              name="mobileNumber"
+              name="phone_number"
               variant="outlined"
               required
               fullWidth
-              id="mobileNumber"
+              id="phone_number"
               label="Mobile Number"
               autoFocus
+              onChange={handleChange}
             />
           </Form.Row>
           <Form.Row item xs={12}>
@@ -32,6 +69,7 @@ export default function SignIn() {
               id="password"
               label="Password"
               autoFocus
+              onChange={handleChange}
             />
           </Form.Row>
           <Form.Button

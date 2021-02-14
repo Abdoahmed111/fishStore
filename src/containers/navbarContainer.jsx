@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router";
-import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
 import { Nav } from "../components";
@@ -8,9 +7,11 @@ import { Divider } from "@material-ui/core";
 import NavbarMenu from "../components/navbar/navbarMenu";
 import { useSelector } from "react-redux";
 import { getCategories } from "../redux/categories/reducers/categoriesReducer";
+import ProfileMenu from "../components/navbar/personMenu";
 
 export default function NavbarContainer() {
-  const categories = useSelector(getCategories).categories;
+  const categories = useSelector(getCategories);
+  const user = JSON.parse(window.localStorage.getItem("user"));
 
   const history = useHistory();
   const handleClickCategory = (id, name) => {
@@ -48,9 +49,18 @@ export default function NavbarContainer() {
           <Nav.SearchInput main="true" placeholder="Search Products" />
         </Nav.FlexDiv>
         <Nav.FlexDiv>
-          <Nav.IconButton edge="start" color="inherit" aria-label="menu">
-            <PersonOutlineOutlinedIcon />
-          </Nav.IconButton>
+          {user ? (
+            <ProfileMenu />
+          ) : (
+            <div>
+              <Nav.Button onClick={history.push({ pathname: "/" })}>
+                Login
+              </Nav.Button>
+              <Nav.Button onClick={history.push({ pathname: "/" })}>
+                Sign UP
+              </Nav.Button>
+            </div>
+          )}
           <Nav.IconButton edge="start" color="inherit">
             <NotificationsNoneOutlinedIcon />
           </Nav.IconButton>
