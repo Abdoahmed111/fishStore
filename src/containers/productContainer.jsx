@@ -3,10 +3,18 @@ import React, { useEffect, useState } from "react";
 import { Product, Loader, Grid } from "../components";
 import AwesomeSlider from "react-awesome-slider";
 import "react-awesome-slider/dist/styles.css";
+import { Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
+import { useHistory } from "react-router";
 
 export default function ProductContainer({ location }) {
   const baseUrl = "http://eslamfishstore.com/public/uploads/";
   const [product, setProduct] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const user = JSON.parse(window.localStorage.getItem("user"));
+  const history = useHistory();
 
   const renderRatingStars = (rating) => {
     let ratings = [];
@@ -22,6 +30,35 @@ export default function ProductContainer({ location }) {
       .get(`/product${location.search}`)
       .then((res) => setProduct(res.data.data));
   }, []);
+
+  const addToCart = () => {
+    const product_id = Number(location.search.split("=")[1]);
+    // check if user is authorized
+    if (user) {
+      axios
+        .post(
+          "/addcart",
+          {
+            product_id: product_id,
+            quantity: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          setOpen(true);
+          setMessage(res.data.massage);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      history.push({
+        pathname: "/signin",
+      });
+    }
+  };
 
   return (
     <>
@@ -76,9 +113,11 @@ export default function ProductContainer({ location }) {
                   )}
                 </Product.Row>
                 <Product.Row item xs={4}>
-                  {renderRatingStars(product.rating_avg).map((star) => (
-                    <p>{star}</p>
-                  ))}
+                  <div style={{ display: "flex" }}>
+                    {renderRatingStars(product.rating_avg).map((star) => (
+                      <p>{star}</p>
+                    ))}
+                  </div>
                 </Product.Row>
               </Product.Row>
               <Product.Row container>
@@ -98,7 +137,21 @@ export default function ProductContainer({ location }) {
                   ))}
                 </Product.Row>
               </Product.Row>
-              <Product.Button fullWidth>add to cart</Product.Button>
+              <Product.Button onClick={() => addToCart()} fullWidth>
+                add to cart
+              </Product.Button>
+              {open && (
+                <Snackbar
+                  style={{ width: "100%" }}
+                  open={open}
+                  autoHideDuration={4000}
+                  onClose={() => setOpen(false)}
+                >
+                  <Alert onClose={() => setOpen(false)} severity="success">
+                    {message}
+                  </Alert>
+                </Snackbar>
+              )}
               <Product.Header variant="h5" component="h6">
                 Description:
               </Product.Header>
